@@ -29,13 +29,22 @@ class Controller {
         let response = await Model.find({driver:driver, user:user})
         if(response.length > 0){
             // res.status(200).json({ success: true, response[0] });
-            res.status(200).send({ success: true, response });
+            res.status(200).send({ type: 'exist' ,success: true, response });
         } else {
-            let doc = new Model(body);
-            doc.save((err, response) => {
-                if (err) return next(err);
-                res.status(200).send({ success: true, response });
-            });
+            let doc = new Model(body);            
+            // doc.save((err, response) => {
+            //     if (err) return next(err);
+            //     res.status(200).send({ type: 'not exist', success: true, response });
+            // });
+
+            doc.save().then(result => {
+                Model
+                   .populate(doc, { path: "driver" })
+                   .then(response => {
+                        res.status(200).send({ type: 'not exist', success: true, response });
+             
+                   })
+             })
         }
     }
 

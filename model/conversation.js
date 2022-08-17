@@ -17,7 +17,7 @@ const Model = new Schema({
     toObject: { virtuals: true }
 })
 
-Model.pre(['find', 'findOne', 'findById'], function () {
+Model.pre(['find', 'findOne', 'findById', 'save'], function () {
     this.populate(['driver', 'user', 'messages']);
 });
 
